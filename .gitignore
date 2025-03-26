@@ -1,0 +1,59 @@
+# Données brutes et traitées
+data/raw/*
+data/processed/*.csv
+data/splits/*
+
+# Modèles et résultats (peuvent être très volumineux)
+models/*.pkl
+results/*.png
+results/*.jpg
+results/*.csv
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+src/__pycache__/
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# Environnements virtuels
+venv/
+ENV/
+.env
+.venv
+env/
+
+# Fichiers système
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
