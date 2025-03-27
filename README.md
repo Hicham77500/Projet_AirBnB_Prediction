@@ -109,12 +109,26 @@ joblib==1.1.0
 
 ## Résultats
 
-Le modèle Random Forest offre les meilleures performances avec :
-- RMSE : 42.78 €
-- R² : 0.82
-- MAE : 31.23 €
+Après comparaison des trois modèles, le Random Forest offre les meilleures performances :
 
-Les caractéristiques les plus influentes sont :
-1. Nombre de personnes accueillies (importance: 0.27)
-2. Nombre de chambres (importance: 0.21)
-3. Localisation (quartier) (importance: 0.18)
+### Performances des modèles (sur l'ensemble de test)
+| Modèle | RMSE | R² |
+|--------|------|-----|
+| Régression linéaire simple (accommodates) | 43.81 | 0.12 |
+| Régression linéaire multiple | 46.55 | 0.003 |
+| **Random Forest** | **35.70** | **0.41** |
+
+Le modèle Random Forest actuel présente les caractéristiques les plus influentes suivantes :
+1. Latitude (importance: 0.17)
+2. ID (importance: 0.17) - *Note: ceci indique un problème potentiel*
+3. Longitude (importance: 0.16)
+4. Nombre de personnes accueillies (importance: 0.12)
+5. Nombre d'avis (importance: 0.09)
+
+### Améliorations prévues
+- Exclure l'ID des variables prédictives (fuite de données)
+- Ajouter le calcul du MAE (Mean Absolute Error)
+- Améliorer le prétraitement des données pour augmenter le R²
+- Implémenter une validation croisée pour évaluer la stabilité du modèle
+
+*Pour des visualisations détaillées et les résultats complets, consultez le notebook 03_model_training.ipynb ou exécutez `python src/model_training.py`.*
