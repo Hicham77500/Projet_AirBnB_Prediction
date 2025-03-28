@@ -1,3 +1,22 @@
+"""
+Module pour l'entraînement et l'évaluation des modèles de prédiction des prix Airbnb.
+
+Ce module contient des fonctions pour :
+- Charger les données d'entraînement et de test.
+- Entraîner des modèles de régression linéaire simple, multiple et Random Forest.
+- Visualiser les prédictions et les corrélations entre les features.
+- Comparer les performances des modèles.
+
+Fonctions principales :
+    - load_data : Charge les données d'entraînement et de test.
+    - train_simple_linear_regression : Entraîne une régression linéaire simple.
+    - train_multiple_linear_regression : Entraîne une régression linéaire multiple.
+    - train_random_forest : Entraîne un modèle Random Forest.
+    - visualize_predictions : Visualise les prédictions vs les valeurs réelles.
+    - plot_correlation_matrix : Affiche la matrice de corrélation des features.
+    - main : Point d'entrée principal pour exécuter le pipeline complet.
+"""
+
 import os
 import pandas as pd
 import numpy as np
@@ -9,36 +28,60 @@ from sklearn.metrics import mean_squared_error, r2_score
 import joblib
 
 def load_data(train_path, test_path):
-    """Charge les données d'entraînement et de test."""
+    """
+    Charge les données d'entraînement et de test à partir de fichiers CSV.
+
+    Args:
+        train_path (str): Chemin vers le fichier CSV des données d'entraînement.
+        test_path (str): Chemin vers le fichier CSV des données de test.
+
+    Returns:
+        tuple: (X_train, y_train, X_test, y_test) où :
+            - X_train, X_test : Features d'entraînement et de test.
+            - y_train, y_test : Cibles d'entraînement et de test.
+    """
     train_df = pd.read_csv(train_path)
     test_df = pd.read_csv(test_path)
-    
+
     # Séparer les features et la cible
     X_train = train_df.drop(columns=['price'])
     y_train = train_df['price']
     X_test = test_df.drop(columns=['price'])
     y_test = test_df['price']
-    
+
     print(f"Données chargées - X_train: {X_train.shape}, y_train: {y_train.shape}")
     print(f"Données chargées - X_test: {X_test.shape}, y_test: {y_test.shape}")
-    
+
     return X_train, y_train, X_test, y_test
 
 def train_simple_linear_regression(X_train, X_test, y_train, y_test, feature):
-    """Entraîne une régression linéaire simple avec une seule feature."""
-    print(f"\nEntraînement de la régression linéaire simple avec la feature '{feature}'")
-    
+    """
+    Entraîne une régression linéaire simple avec une seule feature.
+
+    Args:
+        X_train (pd.DataFrame): Features d'entraînement.
+        X_test (pd.DataFrame): Features de test.
+        y_train (pd.Series): Cible d'entraînement.
+        y_test (pd.Series): Cible de test.
+        feature (str): Nom de la feature à utiliser pour l'entraînement.
+
+    Returns:
+        tuple: (model, metrics, y_test_pred) où :
+            - model : Modèle entraîné.
+            - metrics : Dictionnaire des métriques de performance.
+            - y_test_pred : Prédictions sur les données de test.
+    """
     # Vérifier que la feature existe
     if feature not in X_train.columns:
         raise ValueError(f"La feature '{feature}' n'existe pas dans les données d'entraînement")
-    
+
     model = LinearRegression()
     model.fit(X_train[[feature]], y_train)
-    
+
     # Prédictions
     y_train_pred = model.predict(X_train[[feature]])
     y_test_pred = model.predict(X_test[[feature]])
-    
+
     # Calcul des métriques
     metrics = {
         'train_mse': mean_squared_error(y_train, y_train_pred),
@@ -48,7 +91,7 @@ def train_simple_linear_regression(X_train, X_test, y_train, y_test, feature):
         'train_r2': r2_score(y_train, y_train_pred),
         'test_r2': r2_score(y_test, y_test_pred)
     }
-    
+
     # Affichage des métriques
     print(f"MSE (entraînement): {metrics['train_mse']:.2f}")
     print(f"MSE (test): {metrics['test_mse']:.2f}")
@@ -56,12 +99,12 @@ def train_simple_linear_regression(X_train, X_test, y_train, y_test, feature):
     print(f"RMSE (test): {metrics['test_rmse']:.2f}")
     print(f"R² (entraînement): {metrics['train_r2']:.2f}")
     print(f"R² (test): {metrics['test_r2']:.2f}")
-    
+
     # Sauvegarde du modèle
     os.makedirs("models", exist_ok=True)
     joblib.dump(model, f"models/linear_regression_simple_{feature}.pkl")
     print(f"Modèle sauvegardé dans 'models/linear_regression_simple_{feature}.pkl'")
-    
+
     return model, metrics, y_test_pred
 
 def train_multiple_linear_regression(X_train, X_test, y_train, y_test):
