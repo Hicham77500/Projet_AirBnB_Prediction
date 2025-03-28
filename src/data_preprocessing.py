@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 
+
 def select_columns(df, columns):
     """Sélectionne les colonnes spécifiées."""
     return df[columns]
